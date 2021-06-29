@@ -1,0 +1,19 @@
+docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=admin \
+  -e POSTGRES_USER=unleash_user -e POSTGRES_DB=unleash \
+  --network unleash-network --name postgres postgres
+
+
+  docker run -d -p 4242:4242 \
+  -e DATABASE_HOST=postgres -e DATABASE_NAME=unleash \
+  -e DATABASE_USERNAME=unleash_user -e DATABASE_PASSWORD=admin \
+  -e DATABASE_SSL=false \
+  --network unleash-network unleashorg/unleash-server
+
+  docker run \
+   -e UNLEASH_PROXY_SECRETS=frontend \
+   -e UNLEASH_URL='http://172.20.0.3:4242/api/' \
+   -e UNLEASH_API_TOKEN=f43aaf1accd9fed7924dfe6e1d56ca77b0f66f1c7c96f4d436dce3b57b41750c \
+   -p 3000:3000 \
+   --network unleash-network unleashorg/unleash-proxy
+
+   
